@@ -1,1 +1,1 @@
-export default function Signature(){return <div className="aboutSignature" aria-label="Av. Vedat Karaman"><span className="signatureTitle">Av.</span><span className="signatureName">Vedat Karaman</span></div>;}
+export default function Signature(){return <div className="aboutSignature signatureArtwork" role="img" aria-label="Av. Vedat Karaman imzası"/>;}
