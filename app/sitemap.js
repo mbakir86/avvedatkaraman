@@ -1,0 +1,2 @@
+import { articles, site } from '@/data/site';
+export default function sitemap(){const base=[ '', '/calisma-alanlari','/hakkimizda','/iletisim'].map(p=>({url:`${site.url}${p}`,lastModified:new Date(),changeFrequency:p?'monthly':'weekly',priority:p?0.8:1})); return [...base,...articles.map(a=>({url:`${site.url}/makaleler/${a.slug}`,lastModified:new Date('2023-12-31'),changeFrequency:'yearly',priority:0.7}))];}
