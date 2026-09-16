@@ -27,7 +27,7 @@ export const practiceAreas = [
 export const articles = [
   {
     slug:'deprem-sebebiyle-idarenin-sorumlulugu',
-    title:'Deprem Sebebiyle İdarenin Sorumluluğu ve Başvurulabilecek İdareler',
+    title:'Depremde İdarenin Sorumluluğu ve Başvuru Yolları',
     date:'2023', image:'/images/makale-deprem.webp',
     excerpt:'Deprem nedeniyle meydana gelen zararlar bakımından idarenin hizmet kusuru ve sorumluluğuna ilişkin genel bir değerlendirme.',
     body:[
@@ -39,7 +39,7 @@ export const articles = [
   },
   {
     slug:'evlilik-sebebiyle-istifa-kidem-tazminati',
-    title:'Evlilik Sebebiyle İstifa Eden İşçi Kıdem Tazminatına Hak Kazanır mı?',
+    title:'Evlilik Nedeniyle İstifa ve Kıdem Tazminatı',
     date:'2023', image:'/images/makale-evlilik.webp',
     excerpt:'1475 sayılı İş Kanunu’nun 14. maddesi kapsamında evlilik nedeniyle iş sözleşmesini sona erdiren kadın işçinin kıdem tazminatı hakkına ilişkin kısa değerlendirme.',
     body:[
