@@ -1,7 +1,6 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import { notFound } from 'next/navigation';
-import { articles } from '@/data/site';
-export function generateStaticParams(){return articles.map(a=>({slug:a.slug}))}
-export async function generateMetadata({params}){const {slug}=await params; const a=articles.find(x=>x.slug===slug); if(!a)return {}; return {title:a.title,description:a.excerpt,alternates:{canonical:`/makaleler/${slug}`},openGraph:{images:[a.image]}}}
-export default async function Page({params}){const {slug}=await params; const a=articles.find(x=>x.slug===slug); if(!a)notFound(); return <><section className="articleHero"><div className="articleHeroBg"><Image src={a.image} alt="" fill priority sizes="100vw"/></div><div className="heroShade"/><div className="container"><span className="eyebrow">Hukuki Makale · {a.date}</span><h1>{a.title}</h1></div></section><article className="articlePage container"><div className="articleContent">{a.body.map((p,i)=><p key={i}>{p}</p>)}<div className="notice"><strong>Bilgilendirme notu</strong><span>Bu yazı genel bilgilendirme amacıyla yayımlanmıştır. Mevzuat ve içtihatlar değişebilir; somut hukuki durum için güncel değerlendirme yapılmalıdır.</span></div><p className="author">Av. Vedat Karaman · İstanbul · {a.date}</p><Link href="/#makaleler" className="textLink">← Tüm makalelere dön</Link></div></article></>}
+import {notFound} from 'next/navigation';
+import {publicContent} from '@/lib/content';
+import ContentPage from '@/components/ContentPage';
+async function item(params){const {slug}=await params;return (await publicContent()).articles.find(x=>x.slug===slug);}
+export async function generateMetadata({params}){const a=await item(params);return a?{title:a.seoTitle||a.title,description:a.seoDescription||a.excerpt,alternates:{canonical:`/makaleler/${a.slug}`},openGraph:{type:'article',title:a.title,description:a.excerpt,images:[a.image]}}:{};}
+export default async function Page({params}){const a=await item(params);if(!a)notFound();return <ContentPage item={a} kind="Makale"/>;}

@@ -1,0 +1,11 @@
+CREATE TABLE IF NOT EXISTS cms_documents(key text PRIMARY KEY,data jsonb NOT NULL,revision integer NOT NULL DEFAULT 1,updated_at timestamptz NOT NULL DEFAULT now());
+CREATE TABLE IF NOT EXISTS messages(id uuid PRIMARY KEY DEFAULT gen_random_uuid(),name text NOT NULL,email text NOT NULL,phone text,message text NOT NULL,reply text,status text DEFAULT 'new',created_at timestamptz DEFAULT now());
+CREATE TABLE IF NOT EXISTS subscribers(id uuid PRIMARY KEY DEFAULT gen_random_uuid(),email text UNIQUE NOT NULL,confirmed boolean DEFAULT false,token_hash text NOT NULL,created_at timestamptz DEFAULT now());
+CREATE TABLE IF NOT EXISTS mail_settings(key text PRIMARY KEY,value text NOT NULL);
+CREATE TABLE IF NOT EXISTS mail_outbox(id uuid PRIMARY KEY DEFAULT gen_random_uuid(),recipient text NOT NULL,subject text NOT NULL,body text NOT NULL,status text NOT NULL DEFAULT 'pending',dedupe text UNIQUE,error text,created_at timestamptz DEFAULT now(),sent_at timestamptz);
+CREATE TABLE IF NOT EXISTS rate_limits(key text PRIMARY KEY,count integer NOT NULL,expires_at timestamptz NOT NULL);
+CREATE TABLE IF NOT EXISTS media(id uuid PRIMARY KEY DEFAULT gen_random_uuid(),key text UNIQUE NOT NULL,url text NOT NULL,type text NOT NULL,size integer NOT NULL,created_at timestamptz DEFAULT now());
+CREATE TABLE IF NOT EXISTS visits(id uuid PRIMARY KEY DEFAULT gen_random_uuid(),visitor text NOT NULL,path text NOT NULL,country text,region text,ip_encrypted text,ip_expires_at timestamptz,active_seconds integer NOT NULL DEFAULT 0,created_at timestamptz NOT NULL DEFAULT now(),last_seen timestamptz NOT NULL DEFAULT now());
+CREATE INDEX IF NOT EXISTS visits_created_idx ON visits(created_at);
+CREATE INDEX IF NOT EXISTS visits_path_idx ON visits(path,created_at);
+CREATE TABLE IF NOT EXISTS audit_log(id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,action text NOT NULL,created_at timestamptz DEFAULT now());

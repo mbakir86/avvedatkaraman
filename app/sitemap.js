@@ -1,2 +1,3 @@
-import { articles, site } from '@/data/site';
-export default function sitemap(){const base=[ '', '/calisma-alanlari','/hakkimizda','/iletisim'].map(p=>({url:`${site.url}${p}`,lastModified:new Date(),changeFrequency:p?'monthly':'weekly',priority:p?0.8:1})); return [...base,...articles.map(a=>({url:`${site.url}/makaleler/${a.slug}`,lastModified:new Date('2023-12-31'),changeFrequency:'yearly',priority:0.7}))];}
+import {publicContent} from '@/lib/content';
+export default async function sitemap(){const d=await publicContent(),url=process.env.SITE_URL;return [...['','/calisma-alanlari','/makaleler','/hakkimizda','/iletisim','/gizlilik'].map(p=>({url:url+p,changeFrequency:'weekly',priority:p?0.7:1})),...d.articles.map(a=>({url:`${url}/makaleler/${a.slug}`,changeFrequency:'monthly',priority:0.7})),...d.practiceAreas.map(a=>({url:`${url}/calisma-alanlari/${a.slug}`,priority:0.8})),...d.pages.map(a=>({url:`${url}/sayfa/${a.slug}`,priority:0.6}))];}
+export const dynamic='force-dynamic';

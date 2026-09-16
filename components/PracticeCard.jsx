@@ -1,3 +1,2 @@
-import Image from 'next/image';
-import Icon from './Icon';
-export default function PracticeCard({item}){return <article className="practiceCard"><div className="practiceImage"><Image src={item.image} alt={item.title} fill sizes="(max-width: 760px) 100vw, 33vw"/></div><div className="practiceBody"><div className="iconCube"><Icon name="scales"/></div><h3>{item.title}</h3><p>{item.text}</p></div></article>}
+import Link from 'next/link';
+export default function PracticeCard({item}){return <article className="practiceCard"><Link href={`/calisma-alanlari/${item.slug}`}><div className="practiceImage"><img src={item.image} alt={item.title} loading="lazy"/></div><div className="practiceBody"><span className="eyebrow">HUKUK & DANIŞMANLIK</span><h3>{item.title}</h3><p>{item.text}</p><span className="textLink">İncele ↗</span></div></Link></article>;}

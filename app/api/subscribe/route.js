@@ -1,0 +1,6 @@
+import {randomBytes} from 'node:crypto';
+import {z} from 'zod';
+import {sql} from '@/lib/db';
+import {sameOrigin,body,rateLimit,clientIP,fail,digest} from '@/lib/security';
+import {queueMail,deliverMail,mailConfig} from '@/lib/mail';
+export async function POST(req){if(!sameOrigin(req))return fail('Geçersiz istek.',403);try{if(!await rateLimit('subscribe:'+clientIP(req),3))return fail('Lütfen daha sonra deneyin.',429);const {email,consent}=z.object({email:z.email().max(254),consent:z.literal(true)}).parse(await body(req,1000));if(!await mailConfig())return fail('Abonelik e-posta servisi henüz etkinleştirilmedi. Lütfen daha sonra deneyin.',503);const token=randomBytes(32).toString('hex');const rows=await sql`INSERT INTO subscribers(email,token_hash) VALUES(${email.toLowerCase()},${digest(token)}) ON CONFLICT(email) DO UPDATE SET token_hash=EXCLUDED.token_hash,created_at=now() WHERE subscribers.confirmed=false RETURNING id`;if(rows.length){await queueMail(email,'Makale aboneliğinizi onaylayın',`Aboneliğinizi onaylamak için: ${process.env.SITE_URL}/abonelik?token=${token}\nBu isteği siz yapmadıysanız yok sayabilirsiniz.`,digest(token));await deliverMail();}return Response.json({ok:true});}catch{return fail('Geçerli e-posta ve onay gerekli.');}}
